@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    {% block library %}
+    <script type="text/javascript">
+      var readings = [];
+      {% for reading in latest_reading_list %}
+        readings.unshift(['{{reading.reading_time.time}}',Number('{{reading.temperature}}') ])
+      {% endfor %}
+      readings.unshift(['Time', 'Temperature'])
+    </script>
+    <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+
+    <script type="text/javascript">
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(readings);
+
+        var options = {
+          title: 'Temperature readings over time',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+
+      }
+    </script>
+    {% endblock %}
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">GraphChart-Hackerati (Larry Adames)</a>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <table class="table" style="margin-top:100px;">
+          <caption><strong style="font-size:20px;">Readings table</strong></caption>
+          <thead>
+              <tr>
+                  <th>Time</th>
+                  <th>Temperature</th>
+              </tr>
+          </thead>
+          <tbody class="table-striped">
+          {% if latest_reading_list %}
+              {% for reading in latest_reading_list %}
+              <tr>
+                  <td style="text-align:center;">{{ reading.reading_time.time}}</td>
+                  <td style="text-align:center;">{{ reading.temperature }}</td>
+              </tr>
+              {% endfor %}
+          {% else %}
+            <tr>
+              No data exists
+            </tr>
+          {% endif %}
+          </tbody>
+          </table>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+           <div>
+              <div class="page-header">
+                <div id="curve_chart" style="width: 1000px; height: 500px; margin:0 auto;"></div><br />
+              </div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        
+
+ <!-- Table data for Chart
+    ================================================== -->
+
+
+    <!-- Bootstrap core JavaScript  
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+    
+</html>
