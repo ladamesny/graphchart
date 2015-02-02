@@ -1,8 +1,7 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'graph_data_hackerati.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'graphhackerati.settings')
 
 import django
-django.setup()
 
 from datetime import datetime
 import requests
