@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 
 class Reading(models.Model):
     temperature = models.IntegerField(default=0)
@@ -12,7 +12,7 @@ class Reading(models.Model):
         return name
 
     def was_read_recently(self):
-        now = timezone.now()
+        now = datetime.now()
         return now- datetime.timedelta(hours=1) <= self.reading_time<= now
         was_read_recently.admin_order_field = 'reading_time'
         was_read_recently.boolean = True
